@@ -32,6 +32,7 @@ public class GameActivity extends AppCompatActivity {
     };
 
     private void frame() {
+        if(mGameView.isOver()) finish();
         mGameView.next();
 
         //make a new frame() call in FRAME_RATE millisecond
