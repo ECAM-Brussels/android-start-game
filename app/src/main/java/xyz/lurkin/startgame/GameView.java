@@ -1,8 +1,13 @@
 package xyz.lurkin.startgame;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,14 +21,18 @@ public class GameView extends View {
     private Ball mBall;
     private Pad mPad;
     private float mCommand = 100;
+    private Bitmap ballImage;
 
 
     public GameView(Context context, AttributeSet aSet) {
         super(context, aSet);
 
         mPaint = new Paint();
-        mBall = new Ball(100, 100, 10, 10, 10);
+        mBall = new Ball(100, 100, 70, 10, 10);
         mPad = new Pad(100, 50, 200);
+
+        ballImage = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
+        ballImage = Bitmap.createScaledBitmap(ballImage, 140, 140, true);
     }
 
     public void next() {
@@ -33,7 +42,7 @@ public class GameView extends View {
             mBall.y = getHeight()-100;
         if(mBall.y+mBall.radius > getHeight())
             mBall.horizontalHit();
-        if(mBall.y < mPad.y && mBall.x > mPad.x-mPad.width/2 && mBall.x < mPad.x+mPad.width/2)
+        if(mBall.y - mBall.radius < mPad.y && mBall.x > mPad.x-mPad.width/2 && mBall.x < mPad.x+mPad.width/2)
             mBall.horizontalHit();
         mBall.next();
         mPad.next(mCommand);
@@ -42,8 +51,8 @@ public class GameView extends View {
 
     @Override
     synchronized public void onDraw(Canvas canvas) {
-        canvas.drawCircle(mBall.x, mBall.y, mBall.radius, mPaint);
         canvas.drawRect(mPad.x-mPad.width/2,mPad.y-15, mPad.x+mPad.width/2, mPad.y,mPaint);
+        canvas.drawBitmap(ballImage, mBall.x-mBall.radius, mBall.y-mBall.radius, mPaint);
     }
 
     @Override
