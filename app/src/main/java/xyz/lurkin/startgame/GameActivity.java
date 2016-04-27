@@ -1,14 +1,18 @@
 package xyz.lurkin.startgame;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
 
     private GameView mGameView;
+    private TextView mLivesView;
+    private TextView mPointsView;
     private Handler frameHandler;
     private static final int FRAME_RATE = 20; //50 frames per second
 
@@ -17,6 +21,8 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         mGameView = (GameView) findViewById(R.id.gameview);
+        mLivesView = (TextView) findViewById(R.id.livesView);
+        mPointsView = (TextView) findViewById(R.id.pointsView);
 
         frameHandler = new Handler();
 
@@ -32,11 +38,19 @@ public class GameActivity extends AppCompatActivity {
     };
 
     private void frame() {
-        if(mGameView.isOver()) finish();
-        mGameView.next();
+        if(mGameView.isOver()){
+            Intent i = new Intent(this, StartActivity.class);
+            startActivity(i);
+            finish();
+        }
+        else {
+            mGameView.next();
+            mLivesView.setText(String.format("%d", mGameView.getLives()));
+            mPointsView.setText(String.format("%d", mGameView.getSCore()));
 
-        //make a new frame() call in FRAME_RATE millisecond
-        frameHandler.postDelayed(frameUpdate, FRAME_RATE);
+            //make a new frame() call in FRAME_RATE millisecond
+            frameHandler.postDelayed(frameUpdate, FRAME_RATE);
+        }
     }
 
     //hide system UI

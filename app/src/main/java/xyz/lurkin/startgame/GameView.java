@@ -22,8 +22,8 @@ public class GameView extends View {
     private Pad mPad;
     private float mCommand = 100;
     private Bitmap mBallImage;
-    private Integer mScore = 0;
-    private Integer mLives = 3;
+    private int mScore = 0;
+    private int mLives = 3;
     private boolean mOver = false;
 
 
@@ -64,7 +64,6 @@ public class GameView extends View {
     synchronized public void onDraw(Canvas canvas) {
         canvas.drawRect(mPad.x-mPad.width/2,mPad.y-15, mPad.x+mPad.width/2, mPad.y,mPaint);
         canvas.drawBitmap(mBallImage, mBall.x-mBall.radius, mBall.y-mBall.radius, mPaint);
-        canvas.drawText(mScore.toString(), 10, 60, mPaint);
     }
 
     @Override
@@ -90,5 +89,13 @@ public class GameView extends View {
 
     public boolean isOver() {
         return mOver;
+    }
+
+    public int getSCore() {
+        return mScore;
+    }
+
+    public int getLives() {
+        return mLives;
     }
 }
