@@ -1,10 +1,11 @@
 package xyz.lurkin.startgame;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -39,6 +40,12 @@ public class GameActivity extends AppCompatActivity {
 
     private void frame() {
         if(mGameView.isOver()){
+            SharedPreferences pref = getSharedPreferences(StartActivity.SHARED_PREF_FILE, Context.MODE_PRIVATE);
+            int best = pref.getInt(StartActivity.BEST_SCORE_KEY, 0);
+            int score = mGameView.getScore();
+            if (score > best)
+                pref.edit().putInt(StartActivity.BEST_SCORE_KEY, score).commit();
+
             Intent i = new Intent(this, StartActivity.class);
             startActivity(i);
             finish();
@@ -46,7 +53,7 @@ public class GameActivity extends AppCompatActivity {
         else {
             mGameView.next();
             mLivesView.setText(String.format("%d", mGameView.getLives()));
-            mPointsView.setText(String.format("%d", mGameView.getSCore()));
+            mPointsView.setText(String.format("%d", mGameView.getScore()));
 
             //make a new frame() call in FRAME_RATE millisecond
             frameHandler.postDelayed(frameUpdate, FRAME_RATE);

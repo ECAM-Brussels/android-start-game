@@ -91,7 +91,7 @@ public class GameView extends View {
         return mOver;
     }
 
-    public int getSCore() {
+    public int getScore() {
         return mScore;
     }
 
