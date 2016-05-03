@@ -111,66 +111,40 @@ public class GameView extends View {
     @Override
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        SavedState ss = new SavedState(superState);
 
-        ss.state.putFloat("ballX", mBall.x);
-        ss.state.putFloat("ballY", mBall.y);
-        ss.state.putFloat("ballSpeedX", mBall.getSpeed().x);
-        ss.state.putFloat("ballSpeedY", mBall.getSpeed().y);
-        ss.state.putFloat("ballRadius", mBall.radius);
-        ss.state.putFloat("padX", mPad.x);
-        ss.state.putFloat("padY", mPad.y);
-        ss.state.putFloat("padWidth", mPad.width);
-        ss.state.putInt("score", mScore);
-        ss.state.putInt("lives", mLives);
+        Bundle state = new Bundle();
+
+        state.putParcelable("super", superState);
+
+        state.putFloat("ballX", mBall.x);
+        state.putFloat("ballY", mBall.y);
+        state.putFloat("ballSpeedX", mBall.getSpeed().x);
+        state.putFloat("ballSpeedY", mBall.getSpeed().y);
+        state.putFloat("ballRadius", mBall.radius);
+        state.putFloat("padX", mPad.x);
+        state.putFloat("padY", mPad.y);
+        state.putFloat("padWidth", mPad.width);
+        state.putInt("score", mScore);
+        state.putInt("lives", mLives);
 
         Log.v(TAG, "State Saved");
         Log.v(TAG, "ball speed: ("+mBall.getSpeed().x+", "+mBall.getSpeed().y+")");
 
-        return ss;
+        return state;
     }
 
     @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        mBall = new Ball(ss.state.getFloat("ballX"), ss.state.getFloat("ballY"), ss.state.getFloat("ballRadius"), ss.state.getFloat("ballSpeedX"), ss.state.getFloat("ballSpeedY"));
-        mPad = new Pad(ss.state.getFloat("padX"), ss.state.getFloat("padY"), ss.state.getFloat("padWidth"));
-        mScore = ss.state.getInt("score");
-        mLives = ss.state.getInt("lives");
+    public void onRestoreInstanceState(Parcelable s) {
+        Bundle state = (Bundle) s;
+
+        super.onRestoreInstanceState(state.getParcelable("super"));
+
+        mBall = new Ball(state.getFloat("ballX"), state.getFloat("ballY"), state.getFloat("ballRadius"), state.getFloat("ballSpeedX"), state.getFloat("ballSpeedY"));
+        mPad = new Pad(state.getFloat("padX"), state.getFloat("padY"), state.getFloat("padWidth"));
+        mScore = state.getInt("score");
+        mLives = state.getInt("lives");
 
         Log.v(TAG, "State Restored");
         Log.v(TAG, "ball speed: ("+mBall.getSpeed().x+", "+mBall.getSpeed().y+")");
-    }
-
-    static class SavedState extends BaseSavedState {
-        Bundle state;
-
-        SavedState(Parcelable superState) {
-            super(superState);
-            state = new Bundle();
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-            state = in.readBundle();
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeBundle(state);
-        }
-
-        public static final Parcelable.Creator<SavedState> CREATOR
-                = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
     }
 }
