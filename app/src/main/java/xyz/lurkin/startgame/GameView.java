@@ -128,7 +128,6 @@ public class GameView extends View {
         state.putInt("lives", mLives);
 
         Log.v(TAG, "State Saved");
-        Log.v(TAG, "ball speed: ("+mBall.getSpeed().x+", "+mBall.getSpeed().y+")");
 
         return state;
     }
@@ -145,6 +144,5 @@ public class GameView extends View {
         mLives = state.getInt("lives");
 
         Log.v(TAG, "State Restored");
-        Log.v(TAG, "ball speed: ("+mBall.getSpeed().x+", "+mBall.getSpeed().y+")");
     }
 }

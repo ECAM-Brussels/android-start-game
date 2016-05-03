@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ public class GameActivity extends AppCompatActivity {
     private TextView mPointsView;
     private Handler frameHandler;
     private static final int FRAME_RATE = 20; //50 frames per second
+    private static final String TAG = "GameActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class GameActivity extends AppCompatActivity {
         frameHandler = new Handler();
 
         frame();
+        Log.v(TAG, "Activity Created");
     }
 
     //Runnable that call the frame() method
@@ -73,6 +76,7 @@ public class GameActivity extends AppCompatActivity {
                             View.SYSTEM_UI_FLAG_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+        Log.v(TAG, "Activity Focus Changed");
     }
 
     @Override
@@ -80,6 +84,7 @@ public class GameActivity extends AppCompatActivity {
         super.onPause();
 
         frameHandler.removeCallbacks(frameUpdate);
+        Log.v(TAG, "Activity Paused");
     }
 
     @Override
@@ -87,12 +92,40 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
 
         frame();
+        Log.v(TAG, "Activity Resumed");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v(TAG, "Activity Stopped");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.v(TAG, "Activity Restarted");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        // Saving Activity stuff here
+        Log.v(TAG, "Activity State Saved");
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore Activity stuff here
+        Log.v(TAG, "Activity State Restored");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(TAG, "Activity Destroyed");
     }
 }
