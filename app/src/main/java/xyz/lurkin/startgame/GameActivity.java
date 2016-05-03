@@ -74,4 +74,25 @@ public class GameActivity extends AppCompatActivity {
                             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        frameHandler.removeCallbacks(frameUpdate);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        frame();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+    }
 }
